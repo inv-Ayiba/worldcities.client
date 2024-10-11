@@ -20,9 +20,6 @@ export class CitiesComponent implements OnInit {
   public defaultSortColumn: string = "name";
   public defaultSortOrder: "asc" | "desc" = "asc";
 
-  defaultFilterColumn: string = "name";
-  filterQuery?: string;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private http: HttpClient) {
@@ -34,11 +31,10 @@ export class CitiesComponent implements OnInit {
     //pageEvent.pageSize = 10;
     //this.getData(pageEvent);
   }
-  loadData(query?: string) {
+  loadData() {
     var pageEvent = new PageEvent();
     pageEvent.pageIndex = this.defaultPageIndex;
     pageEvent.pageSize = this.defaultPageSize;
-    this.filterQuery = query;
     this.getData(pageEvent);
   }
   getData(event: PageEvent) {
@@ -47,18 +43,12 @@ export class CitiesComponent implements OnInit {
       .set("pageIndex", event.pageIndex.toString())
       .set("pageSize", event.pageSize.toString())
 
-      .set("sortColumn", (this.sort)
-        ? this.sort.active
-        : this.defaultSortColumn)
-      .set("sortOrder", (this.sort)
-        ? this.sort.direction
-        : this.defaultSortOrder);
-
-    if (this.filterQuery) {
-      params = params
-        .set("filterColumn", this.defaultFilterColumn)
-        .set("filterQuery", this.filterQuery);
-    }
+        .set("sortColumn", (this.sort)
+          ? this.sort.active
+          : this.defaultSortColumn)
+        .set("sortOrder", (this.sort)
+          ? this.sort.direction
+          : this.defaultSortOrder);
 
     this.http.get<any>(url, { params })
       .subscribe({
