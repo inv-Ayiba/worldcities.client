@@ -4,8 +4,12 @@ import { environment } from './../../environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-//git test
+
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 import { City } from './city';
+
 @Component({
   selector: 'app-cities',
   templateUrl: './cities.component.html',
@@ -25,15 +29,28 @@ export class CitiesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  filterTextChanged: Subject<string> = new Subject<string>();
+
   constructor(private http: HttpClient) {
   }
+
   ngOnInit() {
     this.loadData();
-    //var pageEvent = new PageEvent();
-    //pageEvent.pageIndex = 0;
-    //pageEvent.pageSize = 10;
-    //this.getData(pageEvent);
   }
+
+  // debounce filter text changes
+  onFilterTextChanged(filterText: string) {
+    if (!this.filterTextChanged.observed) {
+      this.filterTextChanged
+        .pipe(debounceTime(1000), distinctUntilChanged())
+        .subscribe(query => {
+          this.loadData(query);
+        });
+    }
+    this.filterTextChanged.next(filterText);
+  }
+
   loadData(query?: string) {
     var pageEvent = new PageEvent();
     pageEvent.pageIndex = this.defaultPageIndex;
@@ -41,12 +58,12 @@ export class CitiesComponent implements OnInit {
     this.filterQuery = query;
     this.getData(pageEvent);
   }
+
   getData(event: PageEvent) {
     var url = environment.baseUrl + 'api/Cities';
     var params = new HttpParams()
       .set("pageIndex", event.pageIndex.toString())
       .set("pageSize", event.pageSize.toString())
-
       .set("sortColumn", (this.sort)
         ? this.sort.active
         : this.defaultSortColumn)
