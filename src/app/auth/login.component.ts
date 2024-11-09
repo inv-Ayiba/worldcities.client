@@ -47,7 +47,7 @@ export class LoginComponent
             let returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/';
             this.router.navigateByUrl(returnUrl);
           }
-        },
+        }, 
         error: (error) => {
           console.log(error);
           if (error.status == 401) {

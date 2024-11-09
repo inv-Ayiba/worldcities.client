@@ -5,6 +5,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from './../../environments/environment';
 import { LoginRequest } from './login-request';
 import { LoginResult } from './login-result';
+import { RegisterResult } from './register-result';
+import { RegisterRequest } from './register-request';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +49,14 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
     this.setAuthStatus(false);
   }
+  // register(registerData: RegisterRequest): Observable<RegisterResult> {
+  //   return this.http.post<RegisterResult>('/api/auth/register', registerData);
+  // }
+  register(item: RegisterRequest): Observable<RegisterResult> {
+    const url = environment.baseUrl + 'api/Account/Register';
+    return this.http.post<RegisterResult>(url, item);
+  }
+
 
   private setAuthStatus(isAuthenticated: boolean): void {
     this._authStatus.next(isAuthenticated);

@@ -13,6 +13,9 @@ import { CountriesComponent } from './countries/countries.component';
 import { CityEditComponent } from './cities/city-edit.component';
 import { CountryEditComponent } from './countries/country-edit.component';
 import { LoginComponent } from './auth/login.component';
+import { RegisterComponent } from './auth/register.component';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -24,13 +27,15 @@ import { LoginComponent } from './auth/login.component';
     CityEditComponent,
     CountryEditComponent,
     LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
