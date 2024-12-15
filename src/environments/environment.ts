@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: "https://localhost:40443/"
+  baseUrl: "https://api1.southafricanorth.cloudapp.azure.com/"
 };
